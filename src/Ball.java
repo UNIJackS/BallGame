@@ -27,6 +27,12 @@ public class Ball{
     //   The ball should initially be not moving at all. (step should be 0)
     /*# YOUR CODE HERE */
 
+    private double xposition;
+    private double heightAboveGround;
+    private double stepX = 0;
+    private double stepY = 0;
+    private Color c = Color.black;
+
     // Constructor
     /** Construct a new Ball object.
      *	Parameters are the initial position (x and the height above the ground),
@@ -36,6 +42,9 @@ public class Ball{
      */
     public Ball(double x, double h){
         /*# YOUR CODE HERE */
+        xposition = x;
+        heightAboveGround = h;
+        c = Color.getHSBColor((float)(255*Math.random()), (float)(255*Math.random()), (float)(255*Math.random()));
 
     }
 
@@ -46,6 +55,13 @@ public class Ball{
      */
     public void draw(){
         /*# YOUR CODE HERE */
+        
+        if(xposition < RIGHT_END){
+            UI.setColor(c);
+            UI.fillOval(xposition-0.5*DIAM, GROUND - heightAboveGround - DIAM, DIAM, DIAM);
+            UI.setColor(Color.black);
+            UI.drawOval(xposition-0.5*DIAM, GROUND - heightAboveGround - DIAM, DIAM, DIAM);
+        }
 
     }
 
@@ -58,7 +74,17 @@ public class Ball{
      */
     public void step(){
         /*# YOUR CODE HERE */
+        xposition += stepX;
 
+        if((heightAboveGround += stepY) < 0 ){
+            heightAboveGround = 0;
+            stepY = 0;
+        }else{
+            heightAboveGround += stepY;
+            stepY -= 0.1;
+        }
+    
+        
     }
 
     /**
@@ -67,7 +93,7 @@ public class Ball{
      */
     public void setXSpeed(double xSpeed){
         /*# YOUR CODE HERE */
-
+        stepX = xSpeed;
     }
 
     /**
@@ -76,7 +102,7 @@ public class Ball{
      */
     public void setYSpeed(double ySpeed){
         /*# YOUR CODE HERE */
-
+        stepY = ySpeed;
     }
 
     /**
@@ -84,6 +110,7 @@ public class Ball{
      */
     public double getHeight(){
         /*# YOUR CODE HERE */
+        return(heightAboveGround);
 
     }
 
@@ -92,7 +119,7 @@ public class Ball{
      */
     public double getX(){
         /*# YOUR CODE HERE */
-
+        return(xposition);
     }
 
 

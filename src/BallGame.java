@@ -53,12 +53,14 @@
  
          double shelf1Ht = 50+Math.random()*400;
          Ball target1 = new Ball(SHELF_X, shelf1Ht);
+         double shelf2Ht = 50+Math.random()*400;
+         Ball target2 = new Ball(SHELF_X, shelf2Ht);
  
-         this.drawGame(this.ball, target1, shelf1Ht);
+         this.drawGame(this.ball, target1, shelf1Ht,target2, shelf2Ht);
          int count = 0; 
  
          // run until the target is gone (ie, off the right end)
-         while (ball.getX()!=LAUNCHER_X || target1.getX()<RIGHT_END){
+         while (ball.getX()!=LAUNCHER_X || (target1.getX()<RIGHT_END || target2.getX()<RIGHT_END) ){
  
              //if the ball is over the right end, make a new one.
              if (ball.getX()>=RIGHT_END) {
@@ -75,6 +77,10 @@
              if (target1.getX()!= SHELF_X){
                  target1.step();
              }
+             // move target if it isn't on the shelf
+             if (target2.getX()!= SHELF_X){
+                target2.step();
+            }
  
              //if ball is hitting the target ball on the shelf, then make it start moving too
              double dist = Math.hypot(target1.getX()-this.ball.getX(), target1.getHeight()-this.ball.getHeight());
@@ -82,9 +88,15 @@
                  target1.setXSpeed(2);
                  target1.step();
              }
+
+             double dist2 = Math.hypot(target2.getX()-this.ball.getX(), target2.getHeight()-this.ball.getHeight());
+             if (target2.getX()==SHELF_X && dist2 <= Ball.DIAM){
+                target2.setXSpeed(2);
+                target2.step();
+             }
  
              //redraw the game and pause
-             this.drawGame(this.ball, target1, shelf1Ht);
+             this.drawGame(this.ball, target1, shelf1Ht,target2, shelf2Ht);
  
              UI.sleep(40); // pause of 40 milliseconds
  
@@ -122,10 +134,11 @@
      /**
       * Draw the game: ball, target, ground, launcher and shelf.
       */
-     public void drawGame(Ball ball, Ball target1, double shelf1Ht){        
+     public void drawGame(Ball ball, Ball target1, double shelf1Ht, Ball target2, double shelf2Ht){        
          UI.clearGraphics();
          ball.draw();
          target1.draw();
+         target2.draw();
  
          // draw ground, wall, launcher, and shelf
          UI.setColor(Color.black);
@@ -136,6 +149,7 @@
          UI.drawLine(LAUNCHER_X, GROUND, LAUNCHER_X, GROUND-LAUNCHER_HEIGHT);
          UI.drawLine(LAUNCHER_X-Ball.DIAM/2, GROUND-LAUNCHER_HEIGHT, LAUNCHER_X+Ball.DIAM/2, GROUND-LAUNCHER_HEIGHT);
          UI.drawLine(SHELF_X-Ball.DIAM/2, GROUND-shelf1Ht, SHELF_X+Ball.DIAM/2, GROUND-shelf1Ht);
+         UI.drawLine(SHELF_X-Ball.DIAM/2, GROUND-shelf2Ht, SHELF_X+Ball.DIAM/2, GROUND-shelf2Ht);
      }
  
      
